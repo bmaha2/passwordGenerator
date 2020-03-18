@@ -3,13 +3,14 @@
 function generatePassword() {
   
   //declaring varibles
-  var yourPassword;        // variable for the password
-  var passwordArray = [];  // initialize the password array as empty
-  var lowerCase;           // variable to hold lowercase confirmation
-  var upperCase;           // variable to hold uppercase confirmation
-  var numeric;             // variable to hold numeric confirmation
-  var specialCharacter;    // variable to hold special character confirmation
-  var confirmCount = 0;    // count of how many confimations were selected
+  var yourPassword;            // variable for the password
+  var passwordArray = [];      // initialize the password array as empty
+  var singleCharacterArr = []; //array to hold single character from options
+  var lowerCase;               // variable to hold lowercase confirmation
+  var upperCase;               // variable to hold uppercase confirmation
+  var numeric;                 // variable to hold numeric confirmation
+  var specialCharacter;        // variable to hold special character confirmation
+  var confirmCount = 0;        // count of how many confimations were selected
   
   //array to hold all lowercase charaters
   var lowerCaseArr = ["a", "b", "c", "d", "e", "f", "g", "h", "i","j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v","w", "x", "y","z"];
@@ -25,7 +26,7 @@ function generatePassword() {
   
   var pwdLength = Number(prompt("How many character long is the password ?")); //prompt for the number  
   
-  if (pwdLength !== null) { //starts the program is the user input the number of characters for the password
+  if (pwdLength !== null) { //starts the program if the user inputs number of characters for the password
     
     //checking if the user inputs valid password length between 8 and 128, and is not a string
     while (Number.isNaN(pwdLength) || pwdLength <= 7 || pwdLength >= 129) {
@@ -37,6 +38,7 @@ function generatePassword() {
     // if the user chooses ok generate random lowercase letters equal to the length of the password otherwise set the lower case array to empty
     if (lowerCase == true) {
       lowerCaseArr = randomPick(lowerCaseArr, pwdLength);
+      singleCharacterArr.push(randomPickSingleChar(lowerCaseArr));
       confirmCount ++;
     } else {
       lowerCaseArr = [];
@@ -48,9 +50,10 @@ function generatePassword() {
     //if the user chooses ok generate random uppercase letters equal to the length of the password otherwise set the uppercase array to empty
     if (upperCase == true) {
       upperCaseArr = randomPick(upperCaseArr, pwdLength);
+      singleCharacterArr.push(randomPickSingleChar(upperCaseArr));
       confirmCount ++;
     } else {
-        upperCaseArr = [];
+      upperCaseArr = [];
     }
 
     //user input to confirm to include numbers
@@ -59,6 +62,7 @@ function generatePassword() {
     //if the user chooses ok generate uppercase letters equal to the lenght of the password otherwise set the numeric array to empty
     if (numeric == true) {
       numericArr = randomPick(numericArr, pwdLength);
+      singleCharacterArr.push(randomPickSingleChar(numericArr));
       confirmCount ++;
     } else {
       numericArr = [];
@@ -70,6 +74,7 @@ function generatePassword() {
     
     //if the users choosed ok generate numbers equal to the length of the password otherwise set numeric array to empty
     if (specialCharacter == true) {
+      singleCharacterArr.push(randomPickSingleChar(specialCharacterArr));
       specialCharacterArr = randomPick(specialCharacterArr, pwdLength);
       confirmCount ++;
     } else {
@@ -84,8 +89,12 @@ function generatePassword() {
       }
       return newArray;
     }
+    function randomPickSingleChar(array) {
+      let choice = Math.floor(Math.random() * array.length);
+      return array[choice];
+    }
   
-    //combining all the array to password array
+    //combining all the arrays to password array
     passwordArray.push(...lowerCaseArr, ...upperCaseArr, ...numericArr, ...specialCharacterArr);
   
   
@@ -93,8 +102,8 @@ function generatePassword() {
     if (passwordArray.length == 0) {
     alert ("Must contain at least one of the options. Try again");
     }
-  //generating password equal to the length of the password selected  
-    yourPassword = randomPick(passwordArray,(passwordArray.length / confirmCount)).join("");
+    //generating password equal to the length of the password selected  
+    yourPassword = randomPick(passwordArray,(passwordArray.length / confirmCount)).slice(0,(passwordArray.length/confirmCount)-singleCharacterArr.length).concat(singleCharacterArr).join("");
     return yourPassword;
   }
 }
