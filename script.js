@@ -93,13 +93,13 @@ function generatePassword() {
       let choice = Math.floor(Math.random() * array.length);
       return array[choice];
     }
-  
+   
     //combining all the arrays to password array
     passwordArray.push(...lowerCaseArr, ...upperCaseArr, ...numericArr, ...specialCharacterArr);
   
   
    //If the all the options are selected to negative alert to select at least one option
-    if (passwordArray.length == 0) {
+    if (passwordArray.length === 0) {
     alert ("Must contain at least one of the options. Try again");
     }
     //generating password equal to the length of the password selected  
